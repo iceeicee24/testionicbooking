@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>auth</ion-title>
+    <ion-title>{{isLogin ? 'Login' : 'Signup'}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
   <ion-grid>
     <ion-row>
       <ion-col size-md="6" offset-md="3">
@@ -14,21 +14,49 @@
                 <ion-label position="floating">
                   E-mail
                 </ion-label>
-                <ion-input></ion-input>
+                <ion-input
+                type="email"
+                ngModel
+                name="email"
+                required
+                #emailCtrl="ngModel"
+                email></ion-input>
+                </ion-item>
+              <ion-item *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none">
+                  <ion-label>Should be a valid email</ion-label>
+              
               </ion-item>
               <ion-item>
                 <ion-label position="floating">Password</ion-label>
-                <ion-input type="password"></ion-input>
+                <ion-input type="password" 
+                          ngModel 
+                          name="password" 
+                          required minlength="8"
+                          #passwordCtrl="ngModel">
+              </ion-input>
+              </ion-item>
+              <ion-item *ngIf="!passwordCtrl.valid && passwordCtrl.touched" lines="none">
+                  <ion-label>Should be a valid password</ion-label>
               </ion-item>
             </ion-list>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col size-md="6" offset-md="3">
-          <ion-button color="primary" fill="clear" expand="block">
-              Switch to login
+          <ion-button 
+            type="button" 
+            color="primary" 
+            fill="clear" 
+            expand="block"
+            (onclick)="onSwitchAuthMode()">
+              Switch to {{isLogin ? 'signup' : 'login'}}
             </ion-button>
-            <ion-button color="primary" (click)="onLogin()" expand="block">
+            <ion-button 
+              type="submit" 
+              color="primary" 
+              (click)="onLogin()" 
+              expand="block"
+              [disabled]="!f.valid">
               log in
             </ion-button>
       </ion-col>
